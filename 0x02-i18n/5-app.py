@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-""" Basic Babel setup """
-from flask import Flask, render_template, request, g
+""" Basic Flask App """
+from flask import Flask, g, request, render_template
 from flask_babel import Babel, _
 from typing import Union
 
@@ -14,20 +14,23 @@ users = {
 
 
 class Config(object):
-    """ Configuration Babel """
-    LANGUAGES = ["en", "fr"]
+    """
+    Configuration of available languages in the app
+    """
+    LANGUAGES = ['en', 'fr']
     BABEL_DEFAULT_TIMEZONE = 'UTC'
     BABEL_DEFAULT_LOCALE = 'en'
 
 
-app = Flask(__name__, template_folder='templates')
+app = Flask(__name__)
 app.config.from_object(Config)
 babel = Babel(app)
 
 
 @app.before_request
 def before_request(login_as: int = None):
-    """ Request of each function
+    """
+    Before other functions
     """
     user: dict = get_user()
     print(user)
@@ -35,8 +38,8 @@ def before_request(login_as: int = None):
 
 
 def get_user() -> Union[dict, None]:
-    """ Get the user of the dict
-        Return User
+    """
+    Return user from the dict
     """
     login_user = request.args.get('login_as', None)
 
@@ -51,9 +54,8 @@ def get_user() -> Union[dict, None]:
 
 @babel.localeselector
 def get_locale():
-    """ Locale language
-        Return:
-            Best match to the language
+    """
+    Determine the best match with our supported language
     """
     locale = request.args.get('locale', None)
 
@@ -65,11 +67,14 @@ def get_locale():
 
 @app.route('/', methods=['GET'], strict_slashes=False)
 def hello_world():
-    """ Greeting
-        Return:
-            Initial template html
     """
-    return render_template('5-index.html')
+    Hello world
+    """
+    login = False
+    if g.get('user') is not None:
+        login = True
+
+    return render_template('5-index.html', login=login)
 
 
 if __name__ == "__main__":
