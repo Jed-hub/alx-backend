@@ -3,10 +3,6 @@
 from flask import Flask, render_template
 from flask_babel import Babel
 
-app = Flask(__name__)
-app.config.from_object(Config)
-babel = Babel(app)
-
 
 class Config(object):
     """
@@ -15,6 +11,12 @@ class Config(object):
     LANGUAGES = ['en', 'fr']
     BABEL_DEFAULT_TIMEZONE = 'UTC'
     BABEL_DEFAULT_LOCALE = 'en'
+
+
+app = Flask(__name__)
+app.config.from_object(Config)
+babel = Babel(app)
+
 
 @app.route('/', strict_slashes=False)
 def hello_world():
