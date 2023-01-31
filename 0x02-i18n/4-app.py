@@ -13,7 +13,7 @@ class Config(object):
     BABEL_DEFAULT_LOCALE = 'en'
 
 
-app = Flask(__name__, template_folder='templates')
+app = Flask(__name__)
 app.config.from_object(Config)
 babel = Babel(app)
 
